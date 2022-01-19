@@ -21,18 +21,22 @@ class SuperpoweredSingleGeneratorStageProcessor extends SuperpoweredWebAudio.Aud
   }
 
   processAudio(inputBuffer, outputBuffer, buffersize, parameters) {
-      this.generator.generate(
-          this.genOutputBuffer.pointer, // output, // Pointer to floating point numbers. 32-bit MONO output.
-          buffersize   // number of samples to generae
-      );
+        // Ensure the samplerate is in sync on every audio processing callback
+        this.generator.samplerate = this.samplerate;
 
-      // We now need to convert the mono signal from the generaor into he interleaved stereo format that the parent audio context requires.
-      this.Superpowered.Interleave(
-          this.genOutputBuffer.pointer, // left mono input
-          this.genOutputBuffer.pointer, // right mono input
-          outputBuffer.pointer, // stereo output - this is what is routed to the AudioWorkletProcessor output
-          buffersize // number of frames
-      );
+	    // Render the output buffers
+        this.generator.generate(
+            this.genOutputBuffer.pointer, // output, // Pointer to floating point numbers. 32-bit MONO output.
+            buffersize   // number of samples to generae
+        );
+
+        // We now need to convert the mono signal from the generaor into he interleaved stereo format that the parent audio context requires.
+        this.Superpowered.Interleave(
+            this.genOutputBuffer.pointer, // left mono input
+            this.genOutputBuffer.pointer, // right mono input
+            outputBuffer.pointer, // stereo output - this is what is routed to the AudioWorkletProcessor output
+            buffersize // number of frames
+        );
   }
 }
 
