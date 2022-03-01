@@ -5,33 +5,23 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
-  
+
   constructor(props) {
     super(props);
     this.loadSP();
   }
 
   onMessageFromMainScope(message) {
-   
+
   }
 
   async loadSP () {
     const superpowered = await SuperpoweredGlue.fetch('/superpowered/superpowered.wasm');
-    superpowered.Initialize({
-      licenseKey: "ExampleLicenseKey-WillExpire-OnNextUpdate",
-      enableAudioAnalysis: true,
-      enableFFTAndFrequencyDomain: true,
-      enableAudioTimeStretching: true,
-      enableAudioEffects: true,
-      enableAudioPlayerAndDecoder: true,
-      enableCryptographics: false,
-      enableNetworking: false
-    });
+    superpowered.Initialize("ExampleLicenseKey-WillExpire-OnNextUpdate");
     this.webaudioManager = new SuperpoweredWebAudio(
       48000,
       superpowered
     );
-
 
     // Now create the AudioWorkletNode, passing in the AudioWorkletProcessor url, it's registered name (defined inside the processor) and a callback then gets called when everything is up a ready
     this.processorNode = await this.webaudioManager.createAudioNodeAsync(

@@ -41,7 +41,7 @@ class SuperpoweredWebAudio {
             finalConstraints.audio = { mandatory: { googAutoGainControl: false, googAutoGainControl2: false, googEchoCancellation: false, googNoiseSuppression: false, googHighpassFilter: false, googEchoCancellation2: false, googNoiseSuppression2: false, googDAEchoCancellation: false, googNoiseReduction: false } };
         };
 
-        navigator.getUserMediaMethod = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+        navigator.getUserMediaMethod = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
         if (navigator.getUserMediaMethod) navigator.getUserMediaMethod(finalConstraints, onPermissionGranted, onPermissionDenied);
         else {
             let userMedia = null;
@@ -109,7 +109,7 @@ class SuperpoweredWebAudio {
                 }.bind(node);
             });
         } else {
-            import(url).then((processorModule) => {
+            import(/* webpackIgnore: true */ url).then((processorModule) => {
                 let node = this.audioContext.createScriptProcessor(1024, 2, 2);
                 node.samplerate = this.audioContext.sampleRate;
                 node.inputBuffer = this.Superpowered.createFloatArray(1024 * 2);
