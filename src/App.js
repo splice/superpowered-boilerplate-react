@@ -1,8 +1,9 @@
-import {printMsg} from 'superpowered-audio';
 import {Component, useEffect} from 'react';
-import {SuperpoweredGlue, SuperpoweredWebAudio, SuperpoweredTrackLoader} from 'superpowered-audio';
+import './Superpowered';
 import logo from './logo.svg';
 import './App.css';
+
+const publicSuperpoweredLocation = '/Superpowered.js'
 
 class App extends Component {
 
@@ -16,8 +17,13 @@ class App extends Component {
   }
 
   async loadSP () {
-    const superpowered = await SuperpoweredGlue.fetch('/superpowered/superpowered.wasm');
-    superpowered.Initialize("ExampleLicenseKey-WillExpire-OnNextUpdate");
+    // eslint-disable-next-line
+    const superpowered = await SuperpoweredGlue.Instantiate(
+      "ExampleLicenseKey-WillExpire-OnNextUpdate",
+      publicSuperpoweredLocation
+      );
+      console.log(`Running Superpowered v${superpowered.Version()}`);
+    // eslint-disable-next-line
     this.webaudioManager = new SuperpoweredWebAudio(
       48000,
       superpowered
